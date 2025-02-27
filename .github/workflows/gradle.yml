@@ -21,7 +21,10 @@ jobs:
         distribution: 'temurin'
 
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
+      uses: gradle/actions/setup-gradle@v4
+
+    - name: Grant execute permission to Gradle Wrapper
+      run: chmod +x gradlew
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
@@ -30,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      security-events: write  # 🔧 CORREGIDO: Añadir permisos de seguridad
 
     steps:
     - uses: actions/checkout@v4
@@ -39,5 +43,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: List generated files  # 🔧 NUEVO: Comprobar si el archivo de dependencias existe
+      run: ls -R build/reports/
+
     - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582
+      uses: gradle/actions/dependency-submission@v4
