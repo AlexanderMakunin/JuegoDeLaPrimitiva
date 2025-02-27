@@ -1,4 +1,4 @@
-package com.alexandermakunin;
+package com.primitiva;
 
 public class Main {
     public static void main(String[] args) {
