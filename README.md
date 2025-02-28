@@ -1,2 +1,2 @@
 # JuegoDeLaPrimitiva
-Proyecto de programación: Juego de la primitiva
+Podeis ver la docu del proyecto y el kanban en -Projects
