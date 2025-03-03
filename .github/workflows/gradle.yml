@@ -30,3 +30,4 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew clean build --no-daemon
+        continue-on-error: false  # Asegúrate de que el job falle si este paso falla
