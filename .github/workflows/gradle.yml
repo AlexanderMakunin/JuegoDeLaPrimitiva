@@ -42,49 +42,47 @@ jobs:
           echo "📄 Contenido de main.xml:"
           cat build/reports/checkstyle/main.xml || echo "⚠️ El archivo no existe o está vacío."
 
-      - name: Convertir Checkstyle Report a Markdown
+      - name: Convertir Checkstyle Report a Markdown Simple
         id: format_checkstyle
         run: |
           REPORT_FILE="build/reports/checkstyle/main.xml"
           OUTPUT_FILE="checkstyle_report.md"
 
           echo "### 📝 Checkstyle Report" > $OUTPUT_FILE
-          echo "" >> $OUTPUT_FILE
 
           if [ -f "$REPORT_FILE" ]; then
             ERRORS=$(grep '<error' $REPORT_FILE | wc -l)
             
             if [ "$ERRORS" -gt 0 ]; then
-              echo "#### $ERRORS problemas de estilo encontrados:" >> $OUTPUT_FILE
-              echo "" >> $OUTPUT_FILE
+              echo -e "\n**$ERRORS problemas de estilo encontrados**\n" >> $OUTPUT_FILE
               
-              # Procesamos las violaciones línea por línea
-              cat $REPORT_FILE | grep -o '<file name="[^"]*"[^>]*>' | while read -r file_line; do
-                FILE_PATH=$(echo "$file_line" | sed -E 's/.*name="([^"]+)".*/\1/')
-                FILE_NAME=$(basename "$FILE_PATH")
-                echo -e "\n**📄 $FILE_NAME**\n" >> $OUTPUT_FILE
+              # Método simplificado para asegurar que se muestren todos los errores
+              echo -e "| Archivo | Línea | Problema |\n|---------|-------|----------|\n" >> $OUTPUT_FILE
+              
+              while read -r file_path; do
+                file_name=$(basename "$file_path" | sed 's/.*name=\"\(.*\)\".*/\1/')
                 
-                # Buscar todos los errores para este archivo
-                cat $REPORT_FILE | grep -o "<file name=\"$FILE_PATH\".*</file>" | grep -o '<error[^>]*>' | \
-                while read -r error_line; do
-                  LINE_NUM=$(echo "$error_line" | sed -E 's/.*line="([^"]+)".*/\1/')
-                  MESSAGE=$(echo "$error_line" | sed -E 's/.*message="([^"]+)".*/\1/')
-                  SOURCE=$(echo "$error_line" | sed -E 's/.*source="([^"]+)".*/\1/' | awk -F'.' '{print $NF}')
+                grep -A 10 "name=\"$file_path\"" $REPORT_FILE | grep '<error' | while read -r error_line; do
+                  line_num=$(echo "$error_line" | sed -E 's/.*line="([^"]+)".*/\1/')
+                  message=$(echo "$error_line" | sed -E 's/.*message="([^"]+)".*/\1/' | sed 's/|/-/g')
                   
-                  echo "- **Línea $LINE_NUM**: $MESSAGE [$SOURCE]" >> $OUTPUT_FILE
+                  echo "| $file_name | $line_num | $message |" >> $OUTPUT_FILE
                 done
-              done
+              done < <(grep -o 'name="[^"]*"' $REPORT_FILE | sed 's/name="//' | sed 's/"//')
             else
-              echo "✅ No se encontraron problemas de Checkstyle." >> $OUTPUT_FILE
+              echo -e "\n✅ No se encontraron problemas de Checkstyle." >> $OUTPUT_FILE
             fi
           else
-            echo "⚠️ No se encontró el archivo de reporte de Checkstyle." >> $OUTPUT_FILE
+            echo -e "\n⚠️ No se encontró el archivo de reporte de Checkstyle." >> $OUTPUT_FILE
           fi
+          
+          # Imprimir el contenido del informe para verificar
+          echo "Contenido del informe generado:"
+          cat $OUTPUT_FILE
 
       - name: Publicar Checkstyle Report en el Pull Request
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: checkstyle_report.md
-          recreate: true  # Asegura que el comentario se actualice en lugar de crear varios nuevos
-          ignore_empty: false  # No ignorar si el reporte está vacío
+          recreate: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
