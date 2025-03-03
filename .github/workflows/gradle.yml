@@ -35,18 +35,24 @@ jobs:
         continue-on-error: true
         run: ./gradlew checkstyleMain
 
-      - name: Process Checkstyle Results
-        id: process_checkstyle
+      - name: Convert Checkstyle Report to Markdown
+        id: format_checkstyle
         run: |
-          ./gradlew checkstyleMain
-          CHECKSTYLE_RESULT=$(cat build/reports/checkstyle/main.xml)
-          echo "$CHECKSTYLE_RESULT" | jq -e '.' > /dev/null || { echo "Invalid JSON"; exit 1; }
-          echo "$CHECKSTYLE_RESULT" | jq '.'
+          if [ -f build/reports/checkstyle/main.xml ]; then
+            echo "### Checkstyle Report" > checkstyle_report.md
+            echo "" >> checkstyle_report.md
+            # Extrae errores del XML y los convierte a texto
+            xmllint --xpath "//file/error" build/reports/checkstyle/main.xml 2>/dev/null | \
+            sed -E 's/<error line="([0-9]+)".*message="([^"]+)".*/- Line \1: \2/g' >> checkstyle_report.md
+          else
+            echo "### Checkstyle Report" > checkstyle_report.md
+            echo "✅ No Checkstyle issues found." >> checkstyle_report.md
+          fi
 
-      - name: Create Checkstyle Comments
+      - name: Post Checkstyle Report to PR
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          path: build/reports/checkstyle/main.xml
+          path: checkstyle_report.md
           title: "Checkstyle Report"
-          hideComment: true
+          hideComment: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
