@@ -55,9 +55,25 @@ jobs:
             ERRORS=$(grep '<error' $REPORT_FILE | wc -l)
             
             if [ "$ERRORS" -gt 0 ]; then
-              echo "#### Errores encontrados:" >> $OUTPUT_FILE
-              grep '<error' $REPORT_FILE | \
-                awk -F'"' '{print "- **Línea " $2 "**: [" $5 "] " $6 " (" $4 ")"}' >> $OUTPUT_FILE
+              echo "#### $ERRORS problemas de estilo encontrados:" >> $OUTPUT_FILE
+              echo "" >> $OUTPUT_FILE
+              
+              # Procesamos las violaciones línea por línea
+              cat $REPORT_FILE | grep -o '<file name="[^"]*"[^>]*>' | while read -r file_line; do
+                FILE_PATH=$(echo "$file_line" | sed -E 's/.*name="([^"]+)".*/\1/')
+                FILE_NAME=$(basename "$FILE_PATH")
+                echo -e "\n**📄 $FILE_NAME**\n" >> $OUTPUT_FILE
+                
+                # Buscar todos los errores para este archivo
+                cat $REPORT_FILE | grep -o "<file name=\"$FILE_PATH\".*</file>" | grep -o '<error[^>]*>' | \
+                while read -r error_line; do
+                  LINE_NUM=$(echo "$error_line" | sed -E 's/.*line="([^"]+)".*/\1/')
+                  MESSAGE=$(echo "$error_line" | sed -E 's/.*message="([^"]+)".*/\1/')
+                  SOURCE=$(echo "$error_line" | sed -E 's/.*source="([^"]+)".*/\1/' | awk -F'.' '{print $NF}')
+                  
+                  echo "- **Línea $LINE_NUM**: $MESSAGE [$SOURCE]" >> $OUTPUT_FILE
+                done
+              done
             else
               echo "✅ No se encontraron problemas de Checkstyle." >> $OUTPUT_FILE
             fi
