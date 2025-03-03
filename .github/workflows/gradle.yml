@@ -2,9 +2,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]  
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ] 
 
 jobs:
   build:
@@ -28,22 +28,21 @@ jobs:
 
       - name: Run Checkstyle and Discover Report Path
         id: checkstyle
+        continue-on-error: true  # Allow checkstyleMain to fail without failing the workflow
         run: |
           ./gradlew checkstyleMain
           # Capture Checkstyle report directory from Gradle properties
           REPORT_DIR=$(./gradlew properties | grep 'checkstyleMain.reports.html.destination' | awk '{print $3}' | xargs dirname)
           echo "REPORT_DIR=$REPORT_DIR"
           echo "REPORT_DIR=$REPORT_DIR" >> $GITHUB_OUTPUT
-          
+
           REPORT_FILE="$REPORT_DIR/checkstyle-result.html"  # Construct the expected report file path
           echo "REPORT_FILE=$REPORT_FILE"
           echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_OUTPUT
 
-
-
       - name: Extract Checkstyle Report Data
-        if: steps.checkstyle.outcome == 'success' # Only runs this step if checkstyle run successfully
         id: extract_report
+        if: steps.checkstyle.outcome == 'success' || steps.checkstyle.outcome == 'failure' # Run always if Checkstyle has run
         run: |
           REPORT_FILE="${{ steps.checkstyle.outputs.REPORT_FILE }}" # Get the REPORT_FILE from the previous step output variable
 
@@ -78,7 +77,7 @@ jobs:
           fi
 
       - name: Comment Checkstyle output on PR
-        if: steps.extract_report.outcome == 'success' || steps.checkstyle.outcome != 'success'
+        if: steps.extract_report.outcome == 'success' || steps.extract_report.outcome == 'failure'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: Checkstyle Report
@@ -86,4 +85,4 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew clean build --no-daemon
-        continue-on-error: false
+        continue-on-error: false # Fail the job if build fails due to compilation errors or test failures
