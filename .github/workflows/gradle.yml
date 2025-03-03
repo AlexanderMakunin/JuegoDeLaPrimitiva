@@ -4,6 +4,7 @@ on:
     branches: [ "main", "develop" ]  
   pull_request:
     branches: [ "main", "develop" ]  
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,14 +23,17 @@ jobs:
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Build and run tests
+        run: ./gradlew build
       
       - name: Run Checkstyle
         id: checkstyle
-        continue-on-error: true
+        continue-on-error: true  # No falla por Checkstyle
         run: ./gradlew checkstyleMain
       
       - name: Publish Checkstyle Report
         uses: jwgmeligmeyling/checkstyle-github-action@master
-        if: github.event_name == 'pull_request' && success() || failure()
+        if: github.event_name == 'pull_request'
         with:
           path: '**/build/reports/checkstyle/*.xml'
