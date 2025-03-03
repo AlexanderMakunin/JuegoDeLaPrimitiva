@@ -30,29 +30,30 @@ jobs:
       - name: Compile (falla si hay errores)
         run: ./gradlew build
 
-      - name: Run Checkstyle
+      - name: Run Checkstyle (Forzar ejecución)
         id: checkstyle
         continue-on-error: true
-        run: ./gradlew checkstyleMain
+        run: ./gradlew checkstyleMain --rerun-tasks
 
-      - name: Convert Checkstyle Report to Markdown
+      - name: Convertir Checkstyle Report a Markdown
         id: format_checkstyle
         run: |
+          echo "### 📝 Checkstyle Report" > checkstyle_report.md
+          echo "" >> checkstyle_report.md
+
+          # Verifica si el reporte XML existe
           if [ -f build/reports/checkstyle/main.xml ]; then
-            echo "### Checkstyle Report" > checkstyle_report.md
-            echo "" >> checkstyle_report.md
-            # Extrae errores del XML y los convierte a texto
+            # Extrae errores del XML y los convierte a texto legible
             xmllint --xpath "//file/error" build/reports/checkstyle/main.xml 2>/dev/null | \
-            sed -E 's/<error line="([0-9]+)".*message="([^"]+)".*/- Line \1: \2/g' >> checkstyle_report.md
+            sed -E 's/<error line="([0-9]+)".*message="([^"]+)".*/- **Línea \1**: \2/g' >> checkstyle_report.md
           else
-            echo "### Checkstyle Report" > checkstyle_report.md
-            echo "✅ No Checkstyle issues found." >> checkstyle_report.md
+            echo "✅ No se encontraron problemas de Checkstyle." >> checkstyle_report.md
           fi
 
-      - name: Post Checkstyle Report to PR
+      - name: Publicar Checkstyle Report en el Pull Request
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: checkstyle_report.md
-          recreate: true  # Asegura que el comentario se actualice en cada ejecución
-          ignore_empty: false  # No omitir comentarios si no hay errores
+          recreate: true  # Asegura que el comentario se actualice en lugar de crear varios nuevos
+          ignore_empty: false  # No ignorar si el reporte está vacío
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
