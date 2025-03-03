@@ -1,4 +1,5 @@
 name: Java CI with Gradle
+
 on:
   push:
     branches: [ "main", "develop" ]
@@ -12,6 +13,7 @@ jobs:
       contents: read
       checks: write
       pull-requests: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,6 +40,7 @@ jobs:
         run: |
           ./gradlew checkstyleMain
           CHECKSTYLE_RESULT=$(cat build/reports/checkstyle/main.xml)
+          echo "$CHECKSTYLE_RESULT" | jq -e '.' > /dev/null || { echo "Invalid JSON"; exit 1; }
           echo "$CHECKSTYLE_RESULT" | jq '.'
 
       - name: Create Checkstyle Comments
