@@ -53,6 +53,6 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: checkstyle_report.md
-          title: "Checkstyle Report"
-          hideComment: false
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          recreate: true  # Asegura que el comentario se actualice en cada ejecución
+          ignore_empty: false  # No omitir comentarios si no hay errores
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
