@@ -15,10 +15,18 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
-
 test {
     useJUnitPlatform()
 }
+
 checkstyle {
     toolVersion = '10.21.3'
+    config = resources.text.fromFile("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
