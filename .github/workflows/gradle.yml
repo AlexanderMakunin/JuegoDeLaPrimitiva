@@ -27,13 +27,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Checkstyle and save output
-        run: ./gradlew checkstyleMain > checkstyle-output.txt
-
-      - name: Comment Checkstyle output on PR
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          path: checkstyle-output.txt
+        run: ./gradlew checkstyleMain
 
       - name: Build with Gradle
         run: ./gradlew clean build --no-daemon
         continue-on-error: false  # Asegúrate de que el job falle si este paso falla
+
+      - name: Comment Checkstyle output on PR
+        uses: shackra/action-checkstyle-parser@v1
+        with:
+          report_paths: '**/build/reports/checkstyle/*.xml'
