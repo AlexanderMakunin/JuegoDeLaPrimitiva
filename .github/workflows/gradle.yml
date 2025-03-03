@@ -30,6 +30,9 @@ jobs:
       
       - name: Publish Checkstyle Report
         uses: jwgmeligmeyling/checkstyle-github-action@master
-        if: github.event_name == 'pull_request' && success() || failure()
+        if: github.event_name == 'pull_request' && (success() || failure())
         with:
           path: '**/build/reports/checkstyle/*.xml'
+      
+      - name: Compile
+        run: ./gradlew build
