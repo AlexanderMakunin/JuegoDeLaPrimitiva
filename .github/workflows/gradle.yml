@@ -1,4 +1,3 @@
-# .github/workflows/gradle.yml
 name: Java CI with Gradle
 
 on:
@@ -31,10 +30,13 @@ jobs:
         run: ./gradlew checkstyleMain > checkstyle-output.txt
 
       - name: Comment Checkstyle output on PR
+        id: checkstyle-comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: checkstyle-output.txt
+          header: Checkstyle Report
 
       - name: Build with Gradle
         run: ./gradlew clean build --no-daemon
-        continue-on-error: false  # Asegúrate de que el job falle si este paso falla
+        continue-on-error: false  # Fail the job if build fails
+       # if: steps.checkstyle-comment.outcome == 'success' # Require checkstyle pass before build (optional)
