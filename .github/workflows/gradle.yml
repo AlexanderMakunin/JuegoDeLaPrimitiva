@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write  # Asegura que pueda comentar en PRs
       checks: write 
+      pull-requests: write # Required for checkstyle-github-action to comment
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
       - name: Compile (falla si hay errores)
         run: ./gradlew build
       
-      - name: Run Checkstyle
+      - name: Run CheckstyleZZ
         id: checkstyle
         continue-on-error: true  # No falla por errores de Checkstyle
         run: ./gradlew checkstyleMain
@@ -38,3 +38,4 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           path: '**/build/reports/checkstyle/*.xml'
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Important: Provide the token
