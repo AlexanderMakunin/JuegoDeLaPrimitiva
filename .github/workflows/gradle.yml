@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main", "develop" ]  
   pull_request:
-    branches: [ "main", "develop" ] 
+    branches: [ "main", "develop" ]  
 
 jobs:
   build:
@@ -36,7 +36,7 @@ jobs:
           echo "REPORT_DIR=$REPORT_DIR"
           echo "REPORT_DIR=$REPORT_DIR" >> $GITHUB_OUTPUT
 
-          REPORT_FILE="$REPORT_DIR/checkstyle-result.html"  # Construct the expected report file path
+          REPORT_FILE="$REPORT_DIR/main.html"  # Construct the expected report file path  (Changed from checkstyle-result.html)
           echo "REPORT_FILE=$REPORT_FILE"
           echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_OUTPUT
 
