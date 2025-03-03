@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -25,8 +26,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Run Checkstyle
-        run: ./gradlew checkstyleMain
+      - name: Run Checkstyle and save output
+        run: ./gradlew checkstyleMain > checkstyle-output.txt
+
+      - name: Comment Checkstyle output on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: checkstyle-output.txt
 
       - name: Build with Gradle
         run: ./gradlew clean build --no-daemon
