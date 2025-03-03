@@ -2,10 +2,6 @@
 
 Este repositorio contiene la implementación del **Juego de La Primitiva**.
 
-## Documentación
-
-Toda la documentación del proyecto y el tablero Kanban se pueden encontrar en la sección **Projects** de este repositorio. Te invitamos a revisarlo para mantenerte al tanto del progreso, las tareas pendientes y las prioridades actuales del proyecto.
-
 ---
 
 ## Normas de contribución
