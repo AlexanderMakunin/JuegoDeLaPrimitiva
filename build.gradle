@@ -19,8 +19,6 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
 checkstyle {
-    toolVersion = "8.45"
-    configFile = file("$rootDir/config/checkstyle/checkstyle.xml")
+    toolVersion = '10.21.3'
 }
