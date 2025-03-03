@@ -36,7 +36,11 @@ jobs:
         run: ./gradlew checkstyleMain --rerun-tasks
 
       - name: Verificar contenido del Checkstyle Report
-        run: ls -l build/reports/checkstyle/ && cat build/reports/checkstyle/main.xml || echo "El archivo no existe."
+        run: |
+          echo "📂 Archivos en build/reports/checkstyle:"
+          ls -l build/reports/checkstyle/
+          echo "📄 Contenido de main.xml:"
+          cat build/reports/checkstyle/main.xml || echo "⚠️ El archivo no existe o está vacío."
 
       - name: Convertir Checkstyle Report a Markdown
         id: format_checkstyle
@@ -51,13 +55,14 @@ jobs:
             ERRORS=$(grep '<error' $REPORT_FILE | wc -l)
             
             if [ "$ERRORS" -gt 0 ]; then
-              grep '<error' $REPORT_FILE | awk -F'"' '{print "- **Línea " $2 "**: " $6}' >> $OUTPUT_FILE
+              echo "#### Errores encontrados:" >> $OUTPUT_FILE
+              grep '<error' $REPORT_FILE | \
+                awk -F'"' '{print "- **Línea " $2 "**: [" $5 "] " $6 " (" $4 ")"}' >> $OUTPUT_FILE
             else
               echo "✅ No se encontraron problemas de Checkstyle." >> $OUTPUT_FILE
             fi
           else
             echo "⚠️ No se encontró el archivo de reporte de Checkstyle." >> $OUTPUT_FILE
-          fi
 
       - name: Publicar Checkstyle Report en el Pull Request
         uses: marocchino/sticky-pull-request-comment@v2
