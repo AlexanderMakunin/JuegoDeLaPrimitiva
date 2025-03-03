@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write  # Asegura que pueda comentar en PRs
+      checks: write 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
