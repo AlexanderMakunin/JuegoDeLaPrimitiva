@@ -63,6 +63,7 @@ jobs:
             fi
           else
             echo "⚠️ No se encontró el archivo de reporte de Checkstyle." >> $OUTPUT_FILE
+          fi
 
       - name: Publicar Checkstyle Report en el Pull Request
         uses: marocchino/sticky-pull-request-comment@v2
