@@ -1,88 +1,35 @@
 name: Java CI with Gradle
-
 on:
   push:
     branches: [ "main", "develop" ]  
   pull_request:
     branches: [ "main", "develop" ]  
-
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-
+      
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Run Checkstyle and Discover Report Path
+      
+      - name: Run Checkstyle
         id: checkstyle
-        continue-on-error: true  # Allow checkstyleMain to fail without failing the workflow
-        run: |
-          ./gradlew checkstyleMain
-          # Capture Checkstyle report directory from Gradle properties
-          REPORT_DIR=$(./gradlew properties | grep 'checkstyleMain.reports.html.destination' | awk '{print $3}' | xargs dirname)
-          echo "REPORT_DIR=$REPORT_DIR"
-          echo "REPORT_DIR=$REPORT_DIR" >> $GITHUB_OUTPUT
-
-          REPORT_FILE="$REPORT_DIR/main.html"  # Construct the expected report file path  (Changed from checkstyle-result.html)
-          echo "REPORT_FILE=$REPORT_FILE"
-          echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_OUTPUT
-
-      - name: Extract Checkstyle Report Data
-        id: extract_report
-        if: steps.checkstyle.outcome == 'success' || steps.checkstyle.outcome == 'failure' # Run always if Checkstyle has run
-        run: |
-          REPORT_FILE="${{ steps.checkstyle.outputs.REPORT_FILE }}" # Get the REPORT_FILE from the previous step output variable
-
-          # Check if the report file exists
-          if [ -f "$REPORT_FILE" ]; then
-              echo "Checkstyle report found at: $REPORT_FILE"
-
-              WARNINGS=$(xmllint --html --xpath 'count(//span[@class="TableContent" and contains(text(), "warning")])' "$REPORT_FILE" 2>/dev/null)
-              ERRORS=$(xmllint --html --xpath 'count(//span[@class="TableContent" and contains(text(), "error")])' "$REPORT_FILE" 2>/dev/null)
-
-              echo "Extracted Warnings: $WARNINGS"
-              echo "Extracted Errors: $ERRORS"
-
-              MESSAGE="Checkstyle Report:\n"
-              if [ "$WARNINGS" -gt 0 ] || [ "$ERRORS" -gt 0 ]; then
-                MESSAGE+="  - Warnings: $WARNINGS\n"
-                MESSAGE+="  - Errors: $ERRORS\n"
-                MESSAGE+="  - See full report at: $REPORT_FILE\n"
-              else
-                MESSAGE+="  - No violations found.\n"
-              fi
-
-              echo "MESSAGE<<EOF" >> $GITHUB_OUTPUT
-              echo "$MESSAGE" >> $GITHUB_OUTPUT
-              echo "EOF" >> $GITHUB_OUTPUT
-          else
-              echo "Checkstyle report not found at: $REPORT_FILE"
-              MESSAGE="Checkstyle report not found.  Please check build configuration."
-              echo "MESSAGE<<EOF" >> $GITHUB_OUTPUT
-              echo "$MESSAGE" >> $GITHUB_OUTPUT
-              echo "EOF" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Comment Checkstyle output on PR
-        if: steps.extract_report.outcome == 'success' || steps.extract_report.outcome == 'failure'
-        uses: marocchino/sticky-pull-request-comment@v2
+        continue-on-error: true
+        run: ./gradlew checkstyleMain
+      
+      - name: Publish Checkstyle Report
+        uses: jwgmeligmeyling/checkstyle-github-action@master
+        if: github.event_name == 'pull_request' && success() || failure()
         with:
-          header: Checkstyle Report
-          message: ${{ steps.extract_report.outputs.MESSAGE }}
-
-      - name: Build with Gradle
-        run: ./gradlew clean build --no-daemon
-        continue-on-error: false # Fail the job if build fails due to compilation errors or test failures
+          path: '**/build/reports/checkstyle/*.xml'
