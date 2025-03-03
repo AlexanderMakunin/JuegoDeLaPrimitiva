@@ -21,6 +21,6 @@ test {
 }
 
 checkstyle {
-    toolVersion = "8.45" 
-    config = rootProject.resources.text.fromFile('config/checkstyle/checkstyle.xml')
+    toolVersion = "8.45"
+    configFile = file("$rootDir/config/checkstyle/checkstyle.xml")
 }
