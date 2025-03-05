@@ -1,3 +1,4 @@
+
 # JuegoDeLaPrimitiva
 
 Este repositorio contiene la implementación del **Juego de La Primitiva**.
@@ -22,8 +23,10 @@ En este proyecto contamos con un sistema automatizado que realiza verificaciones
      - Falta de documentación JavaDoc
      - Formato de código (indentación, espacios, etc.)
      - Convenciones estándar de nombres y estructura del código
-   - **Nota importante sobre estilo**: el estilo de Google para Java introduce ciertos aspectos que podrían diferir de lo que estás acostumbrado, como por ejemplo:
-     - Las llaves (**curly braces**) deben abrirse en la misma línea y no en una nueva:
+   - **Puntos clave del Google Style que debes conocer**:
+     - **Longitud máxima de línea**: 100 caracteres
+     - **Indentación**: 2 espacios (no tabs)
+     - **Llaves (curly braces)**: deben abrirse en la misma línea:
        ```java
        // Correcto (estilo Google)
        if (condicion) {
@@ -36,7 +39,24 @@ En este proyecto contamos con un sistema automatizado que realiza verificaciones
            // código
        }
        ```
-     - Aunque buscamos seguir estas convenciones, **existe algo de flexibilidad con el estilo cuando tenga sentido para el equipo. Sin embargo, no hay flexibilidad en otros checks** (como la compilación o la documentación JavaDoc).
+     - **Naming Conventions**:
+       - `UpperCamelCase` para nombres de clases e interfaces
+       - `lowerCamelCase` para métodos y variables
+       - `CONSTANT_CASE` para constantes (estáticas finales)
+       - Los nombres de paquetes se escriben en minúsculas
+     - **Orden de imports**:
+       1. Imports estáticos
+       2. Imports standard de Java (java.*)
+       3. Imports de terceros
+       4. Imports del propio proyecto
+       - Cada grupo separado por línea en blanco
+     - **Espaciado**:
+       - Un espacio después de las palabras clave `if`, `for`, `while`, etc.
+       - No espacios después de paréntesis de apertura o antes de cierre
+       - Un espacio a cada lado de operadores binarios
+     - **Comentarios de JavaDoc**: obligatorios para clases públicas, métodos públicos y constructores públicos
+       
+   - Aunque buscamos seguir estas convenciones, **existe algo de flexibilidad con el estilo cuando tenga sentido para el equipo. Sin embargo, no hay flexibilidad en otros checks** (como la compilación o la documentación JavaDoc).
 
    - Los comentarios y sugerencias de estilo aparecerán directamente en el PR generado.
 
@@ -110,6 +130,7 @@ Para llevar un seguimiento de las tareas pendientes, el progreso actual y las im
 - Recursos adicionales:
   - Guía oficial de GitHub: [Trabajar con ramas en GitHub](https://docs.github.com/es/get-started/quickstart/github-flow)
   - Tutorial sobre cómo usar Git y GitHub de manera efectiva: [Git & GitHub para principiantes](https://rogerdudler.github.io/git-guide/index.es.html)
+  -  Modelos de Github como apoyo en el aprendizaje y resolución de errores: [Github Models](https://github.com/marketplace/models)
 
 ---
 
