@@ -7,10 +7,10 @@ import java.util.Scanner;
 public class Main {
     // Random
     private static final Random aleatorio = new Random();
-    // Array de los numeros de la suerte
+    // Array de los numeros
     private final static int[] num = new int[6];
-    // Array de los numeros de re integro
-    private final static int[] numReintegro = new int[2];
+    // numero de re integro
+    private static int numReintegro = 0;
     // numero minimo de la suerte
     private static final int numMin = 1;
     // numero maximo de la suerte
@@ -48,13 +48,11 @@ public class Main {
                 num[i] = aleatorio.nextInt(numMin,numMax+1);
             }
         }
-        for (int i = 0; i < numReintegro.length; i++) {
-            numReintegro[i] = aleatorio.nextInt(numMin, numMaxReintegro+1);
-        }
+        numReintegro = aleatorio.nextInt(numMin,numMaxReintegro+1);
         System.out.println("*** Estos son tus numeros de la suerte ***");
         System.out.println(Arrays.toString(num));
-        System.out.println("*** Estos son tus numeros de reintegro ***");
-        System.out.println(Arrays.toString(numReintegro));
+        System.out.println("*** Este es tu numero de reintegro ***");
+        System.out.println(numReintegro);
     }
     /*
     El menu para llamar los metodos de los juegos
