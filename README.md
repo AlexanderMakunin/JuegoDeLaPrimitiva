@@ -99,7 +99,7 @@ Para llevar un seguimiento de las tareas pendientes, el progreso actual y las im
   - Escoge una combinación de 6 números entre el 1 y el 49.
   - En un sorteo se seleccionan al azar 6 números más un número complementario.
   - Si tus 6 números coinciden con los seleccionados en el sorteo, ganas el premio mayor (también llamado "categoría especial").
-- Más información sobre cómo funciona La Primitiva: [Reglas oficiales de La Primitiva](https://www.loteriasyapuestas.es/es/la-primitiva/como-se-juega)
+- Más información sobre cómo funciona La Primitiva: [Reglas oficiales de La Primitiva](https://juegos.loteriasyapuestas.es/jugar/la-primitiva/apuesta/?access=headercms&lang=es)
 
 ### Recursos sobre Programación Orientada a Objetos (POO)
 - **Conceptos básicos de POO**: 
