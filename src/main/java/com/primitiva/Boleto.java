@@ -13,16 +13,9 @@ public class Boleto {
   private final int[] numerosPrincipales;
   private final int reintegro;
 
-  /**
-   * Constructor para crear un objeto Boleto.
-   *
-   * @param numerosPrincipales Array de 6 enteros que representan los números principales del
-   *     boleto.
-   * @param reintegro Entero que representa el número de reintegro del boleto.
-   */
-  public Boleto(int[] numerosPrincipales, int reintegro) {
+  public Boleto(int[] numerosPrincipales) {
     this.numerosPrincipales = numerosPrincipales;
-    this.reintegro = reintegro;
+    this.reintegro = PrimitivaConstantes.rnd.nextInt(10) ;
   }
 
   public int[] getNumerosPrincipales() {
