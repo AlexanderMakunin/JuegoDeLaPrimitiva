@@ -1,4 +1,6 @@
-package com.primitiva;
+package com.primitiva.Juego;
+
+import com.primitiva.PrimitivaConstantes;
 
 import java.util.Arrays;
 
@@ -14,8 +16,16 @@ public class Boleto {
   private final int reintegro;
 
   public Boleto(int[] numerosPrincipales) {
+    if (numerosPrincipales.length != 6) {
+      throw new IllegalArgumentException("El boleto debe tener exactamente 6 números.");
+    }
     this.numerosPrincipales = numerosPrincipales;
     this.reintegro = PrimitivaConstantes.rnd.nextInt(10) ;
+  }
+  //falta por implementar
+  public Boleto() {
+    this.numeros = generarNumerosAleatorios();
+    this.reintegro = PrimitivaConstantes.rnd.nextInt(10);
   }
 
   public int[] getNumerosPrincipales() {

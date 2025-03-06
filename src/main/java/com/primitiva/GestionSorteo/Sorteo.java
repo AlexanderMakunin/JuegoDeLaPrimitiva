@@ -1,6 +1,6 @@
 package com.primitiva.GestionSorteo;
 
-import java.time.LocalDateTime;
+
 
 /**
  * La clase {@code Sorteo} representa un sorteo de La Primitiva.
@@ -13,15 +13,17 @@ public class Sorteo {
     private final Bombo bomboPrincipal;
     private final Bombo bomboReintegro;
 
+
     /**
      * Constructor de la clase {@code Sorteo}.
      *
      * @param bomboPrincipal  El bombo principal del sorteo (números del 1 al 49).
      * @param bomboReintegro El bombo para el reintegro (números del 0 al 9).
      */
-    public Sorteo(Bombo bomboPrincipal, Bombo bomboReintegro) {
+    public Sorteo(Bombo bomboPrincipal, Bombo bomboReintegro ) {
         this.bomboPrincipal = bomboPrincipal;
         this.bomboReintegro = bomboReintegro;
+
     }
 
     /**
@@ -57,7 +59,7 @@ public class Sorteo {
     /**
      * Repite un sorteo utilizando el objeto {@code ResultadoSorteo} proporcionado.  Reinicia los bombos,
      * genera nueva combinación, complementario y reintegro y actualiza el objeto
-     * {@code ResultadoSorteo} con los nuevos valores y la fecha/hora actual.  Este método se puede utilizar
+     * {@code ResultadoSorteo} con los nuevos valores .  Este método se puede utilizar
      * en escenarios como "jugar hasta ganar" donde no es necesario almacenar todos los resultados,
      * sino sobrescribir uno existente.
      *
@@ -68,7 +70,6 @@ public class Sorteo {
         resultado.setCombinacion(generarCombinacion());
         resultado.setComplementario(generarComplementario());
         resultado.setReintegro(generarReintegro());
-        resultado.setFechaHora(LocalDateTime.now());
     }
 
     /**
@@ -86,7 +87,7 @@ public class Sorteo {
     }
 
     /**
-     * Reinicia los bombos, es decir mezcla aleatoriamente las bolas del array
+     * Reinicia los bombos, es decir regenera y mezcla las bolas del bombo
      */
     private void reiniciarBombos() {
         bomboPrincipal.reiniciarBolas();
