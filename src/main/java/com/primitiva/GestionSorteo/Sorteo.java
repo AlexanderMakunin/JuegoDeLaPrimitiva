@@ -1,6 +1,6 @@
 package com.primitiva.GestionSorteo;
 
-
+import java.time.LocalDateTime;
 
 /**
  * La clase {@code Sorteo} representa un sorteo de La Primitiva.
@@ -13,17 +13,18 @@ public class Sorteo {
     private final Bombo bomboPrincipal;
     private final Bombo bomboReintegro;
 
-
     /**
      * Constructor de la clase {@code Sorteo}.
      *
      * @param bomboPrincipal  El bombo principal del sorteo (números del 1 al 49).
      * @param bomboReintegro El bombo para el reintegro (números del 0 al 9).
      */
-    public Sorteo(Bombo bomboPrincipal, Bombo bomboReintegro ) {
+    public Sorteo(Bombo bomboPrincipal, Bombo bomboReintegro) {
+        if (bomboPrincipal == null || bomboReintegro == null) {
+            throw new IllegalArgumentException("Los bombos no pueden ser nulos.");
+        }
         this.bomboPrincipal = bomboPrincipal;
         this.bomboReintegro = bomboReintegro;
-
     }
 
     /**
@@ -44,7 +45,6 @@ public class Sorteo {
      */
     public int generarComplementario() {
         return bomboPrincipal.sacarUnNumero(); // un numero que debe ser de los 43 restantes no puede ser igual a los 6 de la combinacion
-
     }
 
     /**
@@ -65,11 +65,15 @@ public class Sorteo {
      *
      * @param resultado El objeto {@code ResultadoSorteo} que se actualizará con los nuevos resultados.
      */
-    public void repeatSorteo(ResultadoSorteo resultado) {
+    public void repeatSorteo(ResultadoSorteo resultado) {  //Mireya para generar hasta ganar el sorteo especial es una locura , aqui no creo nuevos resultados si no que actualizamos uno y vas extrayendo la info entre iteracion.
+        if (resultado == null) {
+            throw new IllegalArgumentException("El resultado no puede ser nulo.");
+        }
         reiniciarBombos();
         resultado.setCombinacion(generarCombinacion());
         resultado.setComplementario(generarComplementario());
         resultado.setReintegro(generarReintegro());
+        resultado.setFechaHora(LocalDateTime.now());
     }
 
     /**
@@ -78,7 +82,7 @@ public class Sorteo {
      *
      * @return Un nuevo objeto {@code ResultadoSorteo} con los resultados del sorteo.
      */
-    public ResultadoSorteo generarSorteo() {
+    public ResultadoSorteo generarSorteo() {  //@Mireya este lo puedes usar para las 10k mientras que no los guardes sus referencias, solo aumentes tu contador de precios, el GB collector los borrara.
         reiniciarBombos();
         int[] combinacion = generarCombinacion();
         int complementario = generarComplementario();
