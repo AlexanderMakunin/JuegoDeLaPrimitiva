@@ -10,7 +10,7 @@ public class Bombo {
 
     public Bombo() {
         this.numerosPrincipales = generarNumerosGanadores();
-        this.complementario = 5; // numero temporal
+        this.complementario = generarComplementario();
         this.reintegro = PrimitivaConstantes.rnd.nextInt(PrimitivaConstantes.REINTEGRO_MIN, PrimitivaConstantes.REINTEGRO_MAX + 1) ;
     }
 
@@ -40,6 +40,10 @@ public class Bombo {
         }
 
         return arrayAleatorio;
+    }
+
+    private int generarComplementario(){
+        return pool[PrimitivaConstantes.rnd.nextInt(0,pool.length - PrimitivaConstantes.TOTAL_NUMEROS)];
     }
 
     private int[] generarPool(){
