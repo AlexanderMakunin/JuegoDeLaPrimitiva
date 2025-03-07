@@ -10,10 +10,6 @@ public class PrimitivaConstantes {
   public static final Scanner sc = new Scanner(System.in);
   public static final Random rnd = new Random();
 
-  // Formateadores
-  public static final DecimalFormat formatoMoneda = new DecimalFormat("#,##0.00 €");
-  public static final DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
   // Constantes específicas de la Primitiva española
   public static final int NUMERO_MIN = 1;
   public static final int NUMERO_MAX = 49;

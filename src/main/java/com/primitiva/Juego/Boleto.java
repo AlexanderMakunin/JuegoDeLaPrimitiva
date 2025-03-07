@@ -9,17 +9,58 @@ public class Boleto {
     private final int reintegro;
 
     public Boleto(int[] numerosPrincipales) {
-        if (numerosPrincipales.length != 6) {
-            throw new IllegalArgumentException("El boleto debe tener exactamente 6 números.");
+        if (!esValido(numerosPrincipales)) {
+            this.numerosPrincipales = generarBoletoAleatorio(49, 6);
+        } else {
+            this.numerosPrincipales = numerosPrincipales;
         }
-        this.numerosPrincipales = numerosPrincipales;
         this.reintegro = PrimitivaConstantes.rnd.nextInt(10);
     }
 
-    //falta por implementar
+
+    //para boleto aleatorio
     public Boleto() {
-        this.numeros = generarNumerosAleatorios();
+        this.numerosPrincipales = generarBoletoAleatorio(49, 6);
         this.reintegro = PrimitivaConstantes.rnd.nextInt(10);
+    }
+
+    /**
+     * Genera un boleto aleatorio del rango y longitud que quieras
+     *
+     * @param n numeros disponibles para el boleto
+     * @param b cantidad de numeros del boleto
+     * @return devuelve un array de enteros con tu boleto generado
+     */
+    private int[] generarBoletoAleatorio(int n, int b) {
+        int[] nums = new int[n];
+        int[] bol = new int[b];
+        int size = nums.length;
+        int index;
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = i + 1;
+        }
+        for (int i = 0; i < b; i++) {
+            index = PrimitivaConstantes.rnd.nextInt(size);
+            bol[i] = nums[index];
+            nums[index] = nums[--size];
+        }
+        return bol;
+    }
+
+    /**
+     *
+     * @param numerosPrincipales boleto a comprobar
+     * @return devuelve si el boleto es valido, 6 nums, no repetidos,etc
+     */
+    private boolean esValido(int[] numerosPrincipales) {
+        if (numerosPrincipales == null || numerosPrincipales.length != 6) return false;
+
+        for (int i = 0; i < numerosPrincipales.length; i++) {
+            for (int j = i + 1; j < numerosPrincipales.length; j++) {
+                if (numerosPrincipales[i] == numerosPrincipales[j]) return false;
+            }
+        }
+        return true;
     }
 
     public int[] getNumerosPrincipales() {
