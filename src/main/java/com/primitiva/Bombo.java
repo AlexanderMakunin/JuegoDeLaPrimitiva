@@ -6,11 +6,12 @@ public class Bombo {
     private final int[] numerosPrincipales;
     private final int complementario;
     private final int reintegro;
+    private int[] pool = generarPool();
 
     public Bombo() {
         this.numerosPrincipales = generarNumerosGanadores();
         this.complementario = 5; // numero temporal
-        this.reintegro = PrimitivaConstantes.rnd.nextInt(10) ;
+        this.reintegro = PrimitivaConstantes.rnd.nextInt(PrimitivaConstantes.REINTEGRO_MIN, PrimitivaConstantes.REINTEGRO_MAX + 1) ;
     }
 
     public int[] getNumerosPrincipales() {
@@ -27,33 +28,42 @@ public class Bombo {
 
 
     private int[] generarNumerosGanadores(){
-        int[] arrayPool = generarPool();
-
         int[] arrayAleatorio = new int[PrimitivaConstantes.TOTAL_NUMEROS];
-        boolean[] usados = new boolean[arrayPool.length];
 
-        int contador = 0;
-        while (contador < 6) {
-            int indice = PrimitivaConstantes.rnd.nextInt(arrayPool.length);
 
-            if (!usados[indice]) {
-                arrayAleatorio[contador] = arrayPool[indice];
-                usados[indice] = true;
-                contador++;
-            }
+        for(int i = 0; i < PrimitivaConstantes.TOTAL_NUMEROS; i++){
+            int indice = PrimitivaConstantes.rnd.nextInt(0,pool.length - i);
+
+            arrayAleatorio[i] = pool[indice];
+            moveToLeft(indice);
+
         }
+
         return arrayAleatorio;
     }
 
     private int[] generarPool(){
-        int[] array = new int[PrimitivaConstantes.COMPLEMENTARIO_MAX - PrimitivaConstantes.COMPLEMENTARIO_MIN];
+        int[] array = new int[(PrimitivaConstantes.NUMERO_MAX + 1) - PrimitivaConstantes.NUMERO_MIN];
+        int contador = 0;
 
-        for(int i = PrimitivaConstantes.COMPLEMENTARIO_MIN; i <= PrimitivaConstantes.COMPLEMENTARIO_MAX; i++){
-            array[i] = i;
+        for(int i = PrimitivaConstantes.NUMERO_MIN; i <= PrimitivaConstantes.NUMERO_MAX; i++){
+            array[contador] = i;
+            contador++;
         }
 
         return array;
     }
+
+    private void moveToLeft(int indice) {
+        int aux = pool[indice];
+
+        for (int i = indice; i < pool.length - 1; i++) {
+            pool[i] = pool[i + 1];
+        }
+
+        pool[pool.length-1] = aux;
+    }
+
 
     @Override
     public String toString() {
