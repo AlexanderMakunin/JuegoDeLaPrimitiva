@@ -3,54 +3,45 @@ package com.primitiva;
 import java.util.Arrays;
 
 public class Bombo {
-    private final int[] numerosPrincipales;
-    private final int complementario;
-    private final int reintegro;
-    private int[] pool = generarPool();
+    private final int[] bolas;
+    private int[] pool;
+    private int size;
 
-    public Bombo() {
-        this.numerosPrincipales = generarNumerosGanadores();
-        this.complementario = generarComplementario();
-        this.reintegro = PrimitivaConstantes.rnd.nextInt(PrimitivaConstantes.REINTEGRO_MIN, PrimitivaConstantes.REINTEGRO_MAX + 1) ;
+    public Bombo(int[] array, int max, int min) {
+        this.pool = generarPool(max, min);
+        this.size = pool.length;
+        generarNumerosGanadores(array);
+        this.bolas = array;
     }
 
-    public int[] getNumerosPrincipales() {
-        return Arrays.copyOf(numerosPrincipales, numerosPrincipales.length);
+    public int[] getBolas() {
+        return bolas;
     }
 
-    public int getComplementario() {
-        return complementario;
-    }
+    public void reiniciarBolas() {size = pool.length;}
 
-    public int getReintegro() {
-        return reintegro;
-    }
-
-
-    private int[] generarNumerosGanadores(){
-        int[] arrayAleatorio = new int[PrimitivaConstantes.TOTAL_NUMEROS];
-
-
-        for(int i = 0; i < PrimitivaConstantes.TOTAL_NUMEROS; i++){
-            int indice = PrimitivaConstantes.rnd.nextInt(0,pool.length - i);
-
-            arrayAleatorio[i] = pool[indice];
-            moveToLeft(indice);
+    private void generarNumerosGanadores(int[] array){
+        for(int i = 0; i < array.length; i++){
+            array[i] = generarBola();
 
         }
-
-        return arrayAleatorio;
     }
 
-    private int generarComplementario(){
-        return pool[PrimitivaConstantes.rnd.nextInt(0,pool.length - PrimitivaConstantes.TOTAL_NUMEROS)];
+    private int generarBola(){
+        int bola;
+        int indice = PrimitivaConstantes.rnd.nextInt(0, size);
+
+        moveToLeft(indice);
+        bola = pool[indice];
+
+        return bola;
     }
 
-    private int[] generarPool(){
-        int[] array = new int[(PrimitivaConstantes.NUMERO_MAX + 1) - PrimitivaConstantes.NUMERO_MIN];
+    private int[] generarPool(int max, int min){
+        int[] array = new int[(max + 1) - min];
         int contador = 0;
 
-        for(int i = PrimitivaConstantes.NUMERO_MIN; i <= PrimitivaConstantes.NUMERO_MAX; i++){
+        for(int i = min; i <= max; i++){
             array[contador] = i;
             contador++;
         }
@@ -64,6 +55,7 @@ public class Bombo {
         for (int i = indice; i < pool.length - 1; i++) {
             pool[i] = pool[i + 1];
         }
+        size--;
 
         pool[pool.length-1] = aux;
     }
