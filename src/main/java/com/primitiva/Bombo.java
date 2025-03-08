@@ -3,41 +3,39 @@ package com.primitiva;
 import java.util.Arrays;
 
 public class Bombo {
-    private final int[] bolas;
     private int[] pool;
     private int size;
 
-    public Bombo(int[] array, int max, int min) {
-        this.pool = generarPool(max, min);
+    public Bombo(int min, int max) {
+        this.pool = generarPool(min, max);
         this.size = pool.length;
-        generarNumerosGanadores(array);
-        this.bolas = array;
+
     }
 
-    public int[] getBolas() {
-        return bolas;
+
+    public void reiniciarBolas() {
+        size = pool.length;
     }
 
-    public void reiniciarBolas() {size = pool.length;}
 
-    private void generarNumerosGanadores(int[] array){
+    private void sacarNumerosEnArray(int [] array){
         for(int i = 0; i < array.length; i++){
-            array[i] = generarBola();
+            int indice = PrimitivaConstantes.rnd.nextInt(0,size);
+
+            array[i] = pool[indice];
+            moveToLeft(indice);
 
         }
     }
 
-    private int generarBola(){
-        int bola;
-        int indice = PrimitivaConstantes.rnd.nextInt(0, size);
 
-        moveToLeft(indice);
-        bola = pool[indice];
-
-        return bola;
+    private int sacarUnNumero(){
+        return pool[PrimitivaConstantes.rnd.nextInt(0,size)];
     }
 
-    private int[] generarPool(int max, int min){
+
+
+    private int[] generarPool(int min, int max){
         int[] array = new int[(max + 1) - min];
         int contador = 0;
 
@@ -63,12 +61,8 @@ public class Bombo {
 
     @Override
     public String toString() {
-        return "Resultado Bombo [numeros="
-                + Arrays.toString(numerosPrincipales)
-                + ", complementario="
-                + complementario
-                + ", reintegro="
-                + reintegro
+        return "contenido Bombo [numeros="
+                + Arrays.toString(pool)
                 + "]";
     }
 }
