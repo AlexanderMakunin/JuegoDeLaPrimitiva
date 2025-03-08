@@ -1,7 +1,6 @@
 package com.primitiva.Juego;
 
 import com.primitiva.PrimitivaConstantes;
-
 import java.util.Arrays;
 
 public class Boleto {
@@ -10,18 +9,18 @@ public class Boleto {
 
     public Boleto(int[] numerosPrincipales) {
         if (!esValido(numerosPrincipales)) {
-            this.numerosPrincipales = generarBoletoAleatorio(49, 6);
+            this.numerosPrincipales = generarBoletoAleatorio(PrimitivaConstantes.NUMERO_MAX, PrimitivaConstantes.TOTAL_NUMEROS);
         } else {
             this.numerosPrincipales = numerosPrincipales;
         }
-        this.reintegro = PrimitivaConstantes.rnd.nextInt(10);
+        this.reintegro = PrimitivaConstantes.rnd.nextInt(PrimitivaConstantes.REINTEGRO_MAX + 1);
     }
 
 
     //para boleto aleatorio
     public Boleto() {
-        this.numerosPrincipales = generarBoletoAleatorio(49, 6);
-        this.reintegro = PrimitivaConstantes.rnd.nextInt(10);
+        this.numerosPrincipales = generarBoletoAleatorio(PrimitivaConstantes.NUMERO_MAX, PrimitivaConstantes.TOTAL_NUMEROS);
+        this.reintegro = PrimitivaConstantes.rnd.nextInt(PrimitivaConstantes.REINTEGRO_MAX + 1);
     }
 
     /**
@@ -53,7 +52,7 @@ public class Boleto {
      * @return devuelve si el boleto es valido, 6 nums, no repetidos,etc
      */
     private boolean esValido(int[] numerosPrincipales) {
-        if (numerosPrincipales == null || numerosPrincipales.length != 6) return false;
+        if (numerosPrincipales == null || numerosPrincipales.length != PrimitivaConstantes.TOTAL_NUMEROS) return false;
 
         for (int i = 0; i < numerosPrincipales.length; i++) {
             for (int j = i + 1; j < numerosPrincipales.length; j++) {

@@ -1,7 +1,5 @@
 package com.primitiva;
 
-import java.text.DecimalFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -20,6 +18,8 @@ public class PrimitivaConstantes {
 
   public static final int COMPLEMENTARIO_MIN = 1;
   public static final int COMPLEMENTARIO_MAX = 49;
+
+  public static final int CANT_SORTEOS = 10000;
 
   // Mensajes comunes
   public static final String MSG_APUESTA_MANUAL = "Selección manual de números";

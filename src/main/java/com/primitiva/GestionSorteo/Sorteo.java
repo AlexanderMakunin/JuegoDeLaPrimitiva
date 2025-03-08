@@ -1,6 +1,8 @@
 package com.primitiva.GestionSorteo;
 
 
+import com.primitiva.PrimitivaConstantes;
+
 public class Sorteo {
     private int[] resultado;
     private int complementario;
@@ -12,12 +14,12 @@ public class Sorteo {
     public Sorteo(Bombo bomboPrincipal, Bombo bomboReintegro) {
         this.bomboPrincipal = bomboPrincipal;
         this.bomboReintegro = bomboReintegro;
-        this.resultado = new int[6]; // Array reutilizable
+        this.resultado = new int[PrimitivaConstantes.TOTAL_NUMEROS]; // Array reutilizable
     }
 
     public void generar() {
         bomboPrincipal.reiniciarBolas(); // Reinicia el bombo para cada sorteo
-        bomboPrincipal.sacarNumerosEnArray(resultado, 6); // Genera los 6 números principales
+        bomboPrincipal.sacarNumerosEnArray(resultado, PrimitivaConstantes.TOTAL_NUMEROS); // Genera los 6 números principales
         complementario = bomboPrincipal.sacarUnNumero(); // Genera el complementario
         reintegro = bomboReintegro.sacarUnNumero(); // Genera el reintegro
     }

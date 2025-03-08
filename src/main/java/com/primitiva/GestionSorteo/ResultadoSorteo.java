@@ -1,5 +1,7 @@
 package com.primitiva.GestionSorteo;
 
+import com.primitiva.PrimitivaConstantes;
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -10,7 +12,7 @@ public class ResultadoSorteo {
     private final LocalDateTime fechaHora;
 
     public ResultadoSorteo(int[] combinacion, int complementario, int reintegro) {
-        if (combinacion == null || combinacion.length != 6) {
+        if (combinacion == null || combinacion.length != PrimitivaConstantes.TOTAL_NUMEROS) {
             throw new IllegalArgumentException("La combinación debe tener exactamente 6 números.");
         }
         this.combinacion = Arrays.copyOf(combinacion, combinacion.length);
