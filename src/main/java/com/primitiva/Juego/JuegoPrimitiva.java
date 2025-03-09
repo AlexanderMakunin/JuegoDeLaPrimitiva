@@ -138,7 +138,6 @@ public class JuegoPrimitiva {
         iteraciones = 0;
         do{
             iteraciones ++;
-            juegoUnico(boleto);
         }while(juegoUnico(boleto) != Premios.ESPECIAL);
         return iteraciones;
     }
