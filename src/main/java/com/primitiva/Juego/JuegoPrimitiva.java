@@ -1,5 +1,6 @@
 package com.primitiva.Juego;
 
+import com.primitiva.GestionSorteo.ResultadoSorteo;
 import com.primitiva.GestionSorteo.Sorteo;
 import com.primitiva.PrimitivaConstantes;
 
@@ -19,7 +20,7 @@ public class JuegoPrimitiva {
     private static Sorteo sorteo;
     private static int aciertos;
     private static boolean reintegro;
-    private static int iteraciones;
+    private static long iteraciones;
 
     // Juego de una sola vez
     public static Premios juegoUnico(Boleto boleto) {
@@ -30,18 +31,26 @@ public class JuegoPrimitiva {
         int complementario = 0;
 
         for (int i = 0; i < sorteo.getResultado().length; i++) {
-            if (sorteo.getResultado()[i] == boleto.getNumerosPrincipales()[i]){
-                aciertos ++;
+            for (int j = 0; j < sorteo.getResultado().length; j++) {
+                if (boleto.getNumerosPrincipales()[i] == sorteo.getResultado()[j]){
+                    aciertos ++;
+                }
             }
         }
 
+        int aux;
+
         if (aciertos == 5){
             for (int i = 0; i < sorteo.getResultado().length; i++) {
-                if (sorteo.getResultado()[i] == boleto.getNumerosPrincipales()[i]){
-                    aciertos ++;
-                }else {
+                aux = 0;
+                for (int j = 0; j < sorteo.getResultado().length; j++) {
+                    if (boleto.getNumerosPrincipales()[i] == sorteo.getResultado()[j]){
+                        aux++;
+                    }
+
+                }
+                if (aux == 0){
                     complementario = boleto.getNumerosPrincipales()[i];
-                    break;
                 }
             }
             complement = complementario == sorteo.getComplementario();
@@ -76,15 +85,17 @@ public class JuegoPrimitiva {
     }
 
     // Jugar hasta obtener el premio
-    public static int juegoHastaPremio(Boleto boleto) {
+    public static long juegoHastaPremio(Boleto boleto) {
         aciertos = 0;
         iteraciones = 0;
         do {
             iteraciones ++;
             sorteo.generar();
             for (int i = 0; i < sorteo.getResultado().length; i++) {
-                if (sorteo.getResultado()[i] == boleto.getNumerosPrincipales()[i]){
-                    aciertos ++;
+                for (int j = 0; j < sorteo.getResultado().length; j++) {
+                    if (boleto.getNumerosPrincipales()[i] == sorteo.getResultado()[j]){
+                        aciertos ++;
+                    }
                 }
             }
             reintegro = boleto.getReintegro() == sorteo.getReintegro();
@@ -93,15 +104,17 @@ public class JuegoPrimitiva {
     }
 
     // Jugar hasta obtener el premio sin reintegro
-    public static int juegoHastaPremioSinReintegro(Boleto boleto) {
+    public static long juegoHastaPremioSinReintegro(Boleto boleto) {
         aciertos = 0;
         iteraciones = 0;
         do {
             iteraciones ++;
             sorteo.generar();
             for (int i = 0; i < sorteo.getResultado().length; i++) {
-                if (sorteo.getResultado()[i] == boleto.getNumerosPrincipales()[i]){
-                    aciertos ++;
+                for (int j = 0; j < sorteo.getResultado().length; j++) {
+                    if (boleto.getNumerosPrincipales()[i] == sorteo.getResultado()[j]){
+                        aciertos ++;
+                    }
                 }
             }
         }while (aciertos < 3);
@@ -111,6 +124,7 @@ public class JuegoPrimitiva {
     // Jugar X cantidad de veces
     public static void juegoDeMuchosSorteos(Boleto boleto) {
         final int MUCHOS_SORTEOS = 10000;
+
         int premioEspecial = 0;
         int premioPrimero = 0;
         int premioSegundo = 0;
@@ -134,12 +148,24 @@ public class JuegoPrimitiva {
     }
 
     // Jugar hasta que salga el especial
-    public static int juegoHastaEspecial(Boleto boleto) {
+    public static long juegoHastaEspecial(Boleto boleto) {
         iteraciones = 0;
         do{
             iteraciones ++;
-        }while(juegoUnico(boleto) != Premios.ESPECIAL);
+        }while();
         return iteraciones;
+    }
+
+    public ResultadoSorteo obtenerUltimoSorteo() {
+        return sorteo.getResultadoGanador();
+    }
+
+    public int obtenerNumeroAciertos() {
+        return aciertos;
+    }
+
+    public boolean tieneReintegro(){
+        return reintegro;
     }
 
 }
