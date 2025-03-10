@@ -4,17 +4,28 @@ import com.primitiva.GestionSorteo.ResultadoSorteo;
 import com.primitiva.GestionSorteo.Sorteo;
 import com.primitiva.PrimitivaConstantes;
 
-
-// señora que estas leyendo esto te wa a echar una mano pa que hagas algo xdd
-// *** RECOMENDACIONES ***
-// usa while para los casos en que si o si estas buscando el objetivo || buscar hasta PREMIO
-// recuerda que solo necesitas comparar datos
-// te recomiendo usar esto: CANT_SORTEOS que es la cantidad de veces del muchos sorteos
-// no es tan dificil por lo menos haz algo (((((
-
 public class JuegoPrimitiva {
+
     public enum Premios{
-        ESPECIAL, PRIMERO, SEGUNDO, TERCERO, CUARTO, QUINTO, NINGUNO
+        ESPECIAL("Premio especial"),
+        PRIMERO("Primer premio"),
+        SEGUNDO("Segundo premio"),
+        TERCERO("Tercer premio"),
+        CUARTO("Cuarto premio"),
+        QUINTO("Quinto premio"),
+        NINGUNO("No has ganado nada");
+
+        private final String texto;
+
+
+        Premios(String texto){
+            this.texto = texto;
+        }
+
+        @Override
+        public String toString(){
+            return texto;
+        }
     }
 
     private static Sorteo sorteo;
@@ -47,7 +58,6 @@ public class JuegoPrimitiva {
                     if (boleto.getNumerosPrincipales()[i] == sorteo.getResultado()[j]){
                         aux++;
                     }
-
                 }
                 if (aux == 0){
                     complementario = boleto.getNumerosPrincipales()[i];
@@ -88,7 +98,7 @@ public class JuegoPrimitiva {
     public static long juegoHastaPremio(Boleto boleto) {
         aciertos = 0;
         iteraciones = 0;
-        do {
+        do { //TODO implementar sin statics
             iteraciones ++;
             sorteo.generar();
             for (int i = 0; i < sorteo.getResultado().length; i++) {
@@ -122,29 +132,26 @@ public class JuegoPrimitiva {
     }
 
     // Jugar X cantidad de veces
-    public static void juegoDeMuchosSorteos(Boleto boleto) {
+    public static int[] juegoDeMuchosSorteos(Boleto boleto) {
         final int MUCHOS_SORTEOS = 10000;
-
-        int premioEspecial = 0;
-        int premioPrimero = 0;
-        int premioSegundo = 0;
-        int premioTercero = 0;
-        int premioCuarto = 0;
-        int premioQuinto = 0;
+        final int[] premios = new int[7];
 
         for (int i = 0; i < MUCHOS_SORTEOS; i++) {
             switch (juegoUnico(boleto)){
-                case ESPECIAL -> premioEspecial++;
-                case PRIMERO -> premioPrimero++;
-                case SEGUNDO -> premioSegundo++;
-                case TERCERO -> premioTercero++;
-                case CUARTO -> premioCuarto++;
-                case QUINTO -> premioQuinto++;
-                default -> ;
+                case ESPECIAL -> premios[0]++;
+                case PRIMERO -> premios[1]++;
+                case SEGUNDO -> premios[2]++;
+                case TERCERO -> premios[3]++;
+                case CUARTO -> premios[4]++;
+                case QUINTO -> premios[5]++;
+                default -> {
+                    if (boleto.getReintegro() == sorteo.getReintegro()){
+                        premios[6]++;
+                    }
+                }
             }
         }
-
-
+        return premios;
     }
 
     // Jugar hasta que salga el especial
@@ -152,7 +159,7 @@ public class JuegoPrimitiva {
         iteraciones = 0;
         do{
             iteraciones ++;
-        }while();
+        }while(juegoUnico(boleto) != Premios.ESPECIAL);
         return iteraciones;
     }
 
