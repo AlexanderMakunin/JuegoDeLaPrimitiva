@@ -28,6 +28,8 @@ public class JuegoPrimitiva {
         }
     }
 
+
+
     private static Sorteo sorteo;
     private static int aciertos;
     private static boolean reintegro;
@@ -96,9 +98,9 @@ public class JuegoPrimitiva {
 
     // Jugar hasta obtener el premio
     public static long juegoHastaPremio(Boleto boleto) {
-        aciertos = 0;
         iteraciones = 0;
         do { //TODO implementar sin statics
+            aciertos = 0;
             iteraciones ++;
             sorteo.generar();
             for (int i = 0; i < sorteo.getResultado().length; i++) {
@@ -109,15 +111,15 @@ public class JuegoPrimitiva {
                 }
             }
             reintegro = boleto.getReintegro() == sorteo.getReintegro();
-        }while (aciertos < 3 || !reintegro);
+        }while (aciertos < 3 || reintegro);
         return iteraciones;
     }
 
     // Jugar hasta obtener el premio sin reintegro
     public static long juegoHastaPremioSinReintegro(Boleto boleto) {
-        aciertos = 0;
         iteraciones = 0;
         do {
+            aciertos = 0;
             iteraciones ++;
             sorteo.generar();
             for (int i = 0; i < sorteo.getResultado().length; i++) {
@@ -155,11 +157,15 @@ public class JuegoPrimitiva {
     }
 
     // Jugar hasta que salga el especial
-    public static long juegoHastaEspecial(Boleto boleto) {
+    public static long juegoHastaEspecialResultado(Boleto boleto) {
         iteraciones = 0;
         do{
             iteraciones ++;
         }while(juegoUnico(boleto) != Premios.ESPECIAL);
+        return ;
+    }
+
+    public long getIteraciones(){
         return iteraciones;
     }
 
