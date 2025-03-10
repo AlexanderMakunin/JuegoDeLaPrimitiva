@@ -18,7 +18,7 @@ public class Bombo {
     }
 
 
-    private void sacarNumerosEnArray(int [] array){
+    public void sacarNumerosEnArray(int [] array){
         for(int i = 0; i < array.length; i++){
             int indice = PrimitivaConstantes.rnd.nextInt(0,size);
 
@@ -29,7 +29,7 @@ public class Bombo {
     }
 
 
-    private int sacarUnNumero(){
+    public int sacarUnNumero(){
         return pool[PrimitivaConstantes.rnd.nextInt(0,size)];
     }
 
