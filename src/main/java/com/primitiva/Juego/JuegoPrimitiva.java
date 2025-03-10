@@ -1,5 +1,6 @@
 package com.primitiva.Juego;
 
+import com.primitiva.Bombo;
 import com.primitiva.GestionSorteo.ResultadoSorteo;
 import com.primitiva.GestionSorteo.Sorteo;
 import com.primitiva.PrimitivaConstantes;
@@ -30,7 +31,9 @@ public class JuegoPrimitiva {
 
 
 
-    private static Sorteo sorteo;
+    private static Bombo bomboprincipal = new Bombo(1, 49);
+    private static Bombo bomboreintegro = new Bombo(1, 9);
+    private static Sorteo sorteo = new Sorteo(bomboprincipal, bomboreintegro);
     private static int aciertos;
     private static boolean reintegro;
     private static long iteraciones;
@@ -157,12 +160,12 @@ public class JuegoPrimitiva {
     }
 
     // Jugar hasta que salga el especial
-    public static long juegoHastaEspecialResultado(Boleto boleto) {
+    public static ResultadoSorteo juegoHastaEspecialResultado(Boleto boleto) {
         iteraciones = 0;
         do{
             iteraciones ++;
         }while(juegoUnico(boleto) != Premios.ESPECIAL);
-        return ;
+        return sorteo.getResultadoGanador();
     }
 
     public long getIteraciones(){

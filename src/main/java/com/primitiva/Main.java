@@ -3,6 +3,8 @@ package com.primitiva;
 import com.primitiva.Juego.Boleto;
 import com.primitiva.Juego.JuegoPrimitiva;
 
+import java.util.Arrays;
+
 public class Main {
     // Array de los numeros
     public final static int[] num = new int[PrimitivaConstantes.TOTAL_NUMEROS];
@@ -71,11 +73,11 @@ public class Main {
             System.out.println("*** 0. Salir ***");
             numIntroducido = (int) Double.parseDouble(PrimitivaConstantes.sc.nextLine());
             switch (numIntroducido) {
-                case 1 -> JuegoPrimitiva.juegoUnico(boleto);
-                case 2 -> JuegoPrimitiva.juegoHastaPremio(boleto);
-                case 3 -> JuegoPrimitiva.juegoHastaPremioSinReintegro(boleto);
-                case 4 -> JuegoPrimitiva.juegoDeMuchosSorteos(boleto);
-                case 5 -> JuegoPrimitiva.juegoHastaEspecial(boleto);
+                case 1 -> System.out.println(JuegoPrimitiva.juegoUnico(boleto));
+                case 2 -> System.out.println(JuegoPrimitiva.juegoHastaPremio(boleto));
+                case 3 -> System.out.println(JuegoPrimitiva.juegoHastaPremioSinReintegro(boleto));
+                case 4 -> System.out.println(Arrays.toString(JuegoPrimitiva.juegoDeMuchosSorteos(boleto)));
+                case 5 -> System.out.println(JuegoPrimitiva.juegoHastaEspecialResultado(boleto));
             }
         } while (numIntroducido != 0);
         System.out.println("Adios...");
