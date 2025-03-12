@@ -74,10 +74,10 @@ public class Main {
             numIntroducido = (int) Double.parseDouble(PrimitivaConstantes.sc.nextLine());
             switch (numIntroducido) {
                 case 1 -> System.out.println(juegos.juegoUnico(boleto));
-                case 2 -> System.out.println(juegos.juegoHastaPremio(boleto));
-                case 3 -> System.out.println(juegos.juegoHastaPremioSinReintegro(boleto));
-                case 4 -> System.out.println(Arrays.toString(juegos.juegoDeMuchosSorteos(boleto)));
-                case 5 -> System.out.println(juegos.juegoHastaEspecialResultado(boleto));
+                case 2 -> System.out.println(juegos.juegoHastaPremio(boleto) + " Sorteos");
+                case 3 -> System.out.println(juegos.juegoHastaPremioSinReintegro(boleto) + " Sorteos");
+                case 4 -> System.out.println(Arrays.toString(juegos.juegoDeMuchosSorteos(boleto)) + "\n[E, 1º, 2º, 3º, 4º, 5º, R]");
+                case 5 -> System.out.println(juegos.juegoHastaEspecialResultado(boleto) + " Sorteos");
             }
         } while (numIntroducido != 0);
         System.out.println("Adios...");

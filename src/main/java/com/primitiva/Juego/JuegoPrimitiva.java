@@ -12,8 +12,8 @@ public class JuegoPrimitiva {
     private final Sorteo sorteo;
 
     public JuegoPrimitiva(){
-        this.bomboPrincipal = new Bombo(1, 49);
-        this.bomboReintegro = new Bombo(0, 9);
+        this.bomboPrincipal = new Bombo(PrimitivaConstantes.NUMERO_MIN, PrimitivaConstantes.NUMERO_MAX);
+        this.bomboReintegro = new Bombo(PrimitivaConstantes.REINTEGRO_MIN, PrimitivaConstantes.REINTEGRO_MAX);
         this.sorteo = new Sorteo(bomboPrincipal, bomboReintegro);
     }
 
@@ -82,13 +82,7 @@ public class JuegoPrimitiva {
             aciertos = 0;
             iteraciones ++;
             sorteo.generar();
-            for (int i = 0; i < sorteo.getResultado().length; i++) {
-                for (int j = 0; j < sorteo.getResultado().length; j++) {
-                    if (boleto.getNumerosPrincipales()[i] == sorteo.getResultado()[j]){
-                        aciertos ++;
-                    }
-                }
-            }
+            aciertos = calcularAciertos(boleto, sorteo);
             reintegro = boleto.getReintegro() == sorteo.getReintegro();
         }while (aciertos < 3 || reintegro);
         return iteraciones;
@@ -102,13 +96,7 @@ public class JuegoPrimitiva {
             aciertos = 0;
             iteraciones ++;
             sorteo.generar();
-            for (int i = 0; i < sorteo.getResultado().length; i++) {
-                for (int j = 0; j < sorteo.getResultado().length; j++) {
-                    if (boleto.getNumerosPrincipales()[i] == sorteo.getResultado()[j]){
-                        aciertos ++;
-                    }
-                }
-            }
+            aciertos = calcularAciertos(boleto, sorteo);
         }while (aciertos < 3);
         return iteraciones;
     }
