@@ -7,101 +7,77 @@ import com.primitiva.PrimitivaConstantes;
 
 public class JuegoPrimitiva {
 
-    public enum Premios{
-        ESPECIAL("Premio especial"),
-        PRIMERO("Primer premio"),
-        SEGUNDO("Segundo premio"),
-        TERCERO("Tercer premio"),
-        CUARTO("Cuarto premio"),
-        QUINTO("Quinto premio"),
-        NINGUNO("No has ganado nada");
+    private final Bombo bomboPrincipal;
+    private final Bombo bomboReintegro;
+    private final Sorteo sorteo;
 
-        private final String texto;
-
-
-        Premios(String texto){
-            this.texto = texto;
-        }
-
-        @Override
-        public String toString(){
-            return texto;
-        }
+    public JuegoPrimitiva(){
+        this.bomboPrincipal = new Bombo(1, 49);
+        this.bomboReintegro = new Bombo(0, 9);
+        this.sorteo = new Sorteo(bomboPrincipal, bomboReintegro);
     }
 
-
-
-    private static Bombo bomboprincipal = new Bombo(1, 49);
-    private static Bombo bomboreintegro = new Bombo(1, 9);
-    private static Sorteo sorteo = new Sorteo(bomboprincipal, bomboreintegro);
-    private static int aciertos;
-    private static boolean reintegro;
-    private static long iteraciones;
-
     // Juego de una sola vez
-    public static Premios juegoUnico(Boleto boleto) {
-        aciertos = 0;
+    public Premios juegoUnico(Boleto boleto) {
         sorteo.generar();
-        reintegro = boleto.getReintegro() == sorteo.getReintegro();
-        boolean complement = false;
-        int complementario = 0;
+        int aciertos = calcularAciertos(boleto, sorteo);
+        boolean reintegro = boleto.getReintegro() == sorteo.getReintegro();
+        boolean complementario = calcularComplementario(boleto, sorteo);
 
-        for (int i = 0; i < sorteo.getResultado().length; i++) {
-            for (int j = 0; j < sorteo.getResultado().length; j++) {
-                if (boleto.getNumerosPrincipales()[i] == sorteo.getResultado()[j]){
-                    aciertos ++;
+        return determinarPremio(aciertos, reintegro, complementario);
+    }
+
+    private int calcularAciertos(Boleto boleto, Sorteo sorteo) {
+        int aciertos = 0;
+        for (int numero : boleto.getNumerosPrincipales()) {
+            for (int resultado : sorteo.getResultado()) {
+                if (numero == resultado) {
+                    aciertos++;
+                    break;
                 }
             }
         }
+        return aciertos;
+    }
 
-        int aux;
-
-        if (aciertos == 5){
-            for (int i = 0; i < sorteo.getResultado().length; i++) {
-                aux = 0;
-                for (int j = 0; j < sorteo.getResultado().length; j++) {
-                    if (boleto.getNumerosPrincipales()[i] == sorteo.getResultado()[j]){
-                        aux++;
+    private boolean calcularComplementario(Boleto boleto, Sorteo sorteo) {
+        if (calcularAciertos(boleto, sorteo) == 5) {
+            for (int numero : boleto.getNumerosPrincipales()) {
+                boolean encontrado = false;
+                for (int resultado : sorteo.getResultado()) {
+                    if (numero == resultado) {
+                        encontrado = true;
+                        break;
                     }
                 }
-                if (aux == 0){
-                    complementario = boleto.getNumerosPrincipales()[i];
+                if (!encontrado) {
+                    return numero == sorteo.getComplementario();
                 }
             }
-            complement = complementario == sorteo.getComplementario();
         }
+        return false;
+    }
 
-
-        switch (aciertos){
-            case 3 -> {
+    private Premios determinarPremio(int aciertos, boolean reintegro, boolean complementario) {
+        switch (aciertos) {
+            case 3:
                 return Premios.QUINTO;
-            }
-            case 4 -> {
+            case 4:
                 return Premios.CUARTO;
-            }
-            case 5 -> {
-                if (complement){
-                    return Premios.SEGUNDO;
-                }else {
-                    return Premios.TERCERO;
-                }
-            }
-            case 6 -> {
-                if (reintegro){
-                    return Premios.ESPECIAL;
-                }else {
-                    return Premios.PRIMERO;
-                }
-            }
-            default -> {
+            case 5:
+                return complementario ? Premios.SEGUNDO : Premios.TERCERO;
+            case 6:
+                return reintegro ? Premios.ESPECIAL : Premios.PRIMERO;
+            default:
                 return Premios.NINGUNO;
-            }
         }
     }
 
     // Jugar hasta obtener el premio
-    public static long juegoHastaPremio(Boleto boleto) {
-        iteraciones = 0;
+    public long juegoHastaPremio(Boleto boleto) {
+        int iteraciones = 0;
+        int aciertos;
+        boolean reintegro;
         do { //TODO implementar sin statics
             aciertos = 0;
             iteraciones ++;
@@ -119,8 +95,9 @@ public class JuegoPrimitiva {
     }
 
     // Jugar hasta obtener el premio sin reintegro
-    public static long juegoHastaPremioSinReintegro(Boleto boleto) {
-        iteraciones = 0;
+    public long juegoHastaPremioSinReintegro(Boleto boleto) {
+        int iteraciones = 0;
+        int aciertos;
         do {
             aciertos = 0;
             iteraciones ++;
@@ -137,7 +114,7 @@ public class JuegoPrimitiva {
     }
 
     // Jugar X cantidad de veces
-    public static int[] juegoDeMuchosSorteos(Boleto boleto) {
+    public int[] juegoDeMuchosSorteos(Boleto boleto) {
         final int MUCHOS_SORTEOS = 10000;
         final int[] premios = new int[7];
 
@@ -160,28 +137,17 @@ public class JuegoPrimitiva {
     }
 
     // Jugar hasta que salga el especial
-    public static ResultadoSorteo juegoHastaEspecialResultado(Boleto boleto) {
-        iteraciones = 0;
+    public ResultadoSorteo juegoHastaEspecialResultado(Boleto boleto) {
+        int iteraciones = 0;
         do{
             iteraciones ++;
         }while(juegoUnico(boleto) != Premios.ESPECIAL);
         return sorteo.getResultadoGanador();
     }
 
-    public long getIteraciones(){
-        return iteraciones;
-    }
-
     public ResultadoSorteo obtenerUltimoSorteo() {
         return sorteo.getResultadoGanador();
     }
 
-    public int obtenerNumeroAciertos() {
-        return aciertos;
-    }
-
-    public boolean tieneReintegro(){
-        return reintegro;
-    }
 
 }

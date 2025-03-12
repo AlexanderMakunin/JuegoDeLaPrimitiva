@@ -73,13 +73,15 @@ public class Main {
             System.out.println("*** 0. Salir ***");
             numIntroducido = (int) Double.parseDouble(PrimitivaConstantes.sc.nextLine());
             switch (numIntroducido) {
-                case 1 -> System.out.println(JuegoPrimitiva.juegoUnico(boleto));
-                case 2 -> System.out.println(JuegoPrimitiva.juegoHastaPremio(boleto));
-                case 3 -> System.out.println(JuegoPrimitiva.juegoHastaPremioSinReintegro(boleto));
-                case 4 -> System.out.println(Arrays.toString(JuegoPrimitiva.juegoDeMuchosSorteos(boleto)));
-                case 5 -> System.out.println(JuegoPrimitiva.juegoHastaEspecialResultado(boleto));
+                case 1 -> System.out.println(juegos.juegoUnico(boleto));
+                case 2 -> System.out.println(juegos.juegoHastaPremio(boleto));
+                case 3 -> System.out.println(juegos.juegoHastaPremioSinReintegro(boleto));
+                case 4 -> System.out.println(Arrays.toString(juegos.juegoDeMuchosSorteos(boleto)));
+                case 5 -> System.out.println(juegos.juegoHastaEspecialResultado(boleto));
             }
         } while (numIntroducido != 0);
         System.out.println("Adios...");
     }
+
+    private static JuegoPrimitiva juegos = new JuegoPrimitiva();
 }
