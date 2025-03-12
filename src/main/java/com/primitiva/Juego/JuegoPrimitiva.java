@@ -137,12 +137,12 @@ public class JuegoPrimitiva {
     }
 
     // Jugar hasta que salga el especial
-    public ResultadoSorteo juegoHastaEspecialResultado(Boleto boleto) {
+    public int juegoHastaEspecialResultado(Boleto boleto) {
         int iteraciones = 0;
         do{
             iteraciones ++;
         }while(juegoUnico(boleto) != Premios.ESPECIAL);
-        return sorteo.getResultadoGanador();
+        return iteraciones;
     }
 
     public ResultadoSorteo obtenerUltimoSorteo() {
