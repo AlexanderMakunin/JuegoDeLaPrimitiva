@@ -4,7 +4,7 @@ import com.primitiva.GestionSorteo.Bombo;
 import com.primitiva.GestionSorteo.ResultadoSorteo;
 import com.primitiva.GestionSorteo.Sorteo;
 import com.primitiva.PrimitivaConstantes;
-
+//TODO javadocs
 public class JuegoPrimitiva {
 
     private final Sorteo sorteo;
@@ -85,7 +85,7 @@ public class JuegoPrimitiva {
             sorteo.generar();
             aciertos = calcularAciertos(boleto);
             reintegro = boleto.getReintegro() == sorteo.getReintegro();
-        }while (aciertos < 3 || reintegro);
+        }while (aciertos < 3 && !reintegro);
         return iteraciones;
     }
 

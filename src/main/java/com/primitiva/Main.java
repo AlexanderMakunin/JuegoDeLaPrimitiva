@@ -4,7 +4,7 @@ import com.primitiva.Juego.Boleto;
 import com.primitiva.Juego.JuegoPrimitiva;
 
 import java.util.Arrays;
-
+//TODO implementar try and catch para valores que no sean numeros, la comprobacion de sin son del 1 al 49 o asi ya esta hecha en Boleto
 public class Main {
     // Array de los numeros
     public final static int[] num = new int[PrimitivaConstantes.TOTAL_NUMEROS];
@@ -60,7 +60,7 @@ public class Main {
     }
     /*
     El menu para llamar los metodos de los juegos
-     */
+     */ //TODO mejora el atractivo como si fuera un casino, puedes usar colores.
     private static void menu() {
         do {
             System.out.println("*** Menu ***");

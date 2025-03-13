@@ -3,9 +3,9 @@ package com.primitiva.GestionSorteo;
 import com.primitiva.PrimitivaConstantes;
 
 import java.util.Arrays;
-
+//TODO javadocs
 public class Bombo {
-    private int[] pool;
+    private final int[] pool;
     private int size;
 
     public Bombo(int min, int max) {
@@ -19,7 +19,7 @@ public class Bombo {
         size = pool.length;
     }
 
-
+    //TODO que sacar un numero haga basicamente esta operacion , y en sacarNumerosenArray x los que sean por parametro, solo llamar al metodo sacarBola/SacarUno
     public void sacarNumerosEnArray(int [] array){
         for(int i = 0; i < array.length; i++){
             int indice = PrimitivaConstantes.rnd.nextInt(0,size);
@@ -48,7 +48,7 @@ public class Bombo {
 
         return array;
     }
-
+    //TODO quitar este metodo , no es necesario desplazar
     private void moveToLeft(int indice) {
         int aux = pool[indice];
 
