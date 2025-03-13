@@ -7,13 +7,11 @@ import com.primitiva.PrimitivaConstantes;
 
 public class JuegoPrimitiva {
 
-    private final Bombo bomboPrincipal;
-    private final Bombo bomboReintegro;
     private final Sorteo sorteo;
 
     public JuegoPrimitiva(){
-        this.bomboPrincipal = new Bombo(PrimitivaConstantes.NUMERO_MIN, PrimitivaConstantes.NUMERO_MAX);
-        this.bomboReintegro = new Bombo(PrimitivaConstantes.REINTEGRO_MIN, PrimitivaConstantes.REINTEGRO_MAX);
+        Bombo bomboPrincipal = new Bombo(PrimitivaConstantes.NUMERO_MIN, PrimitivaConstantes.NUMERO_MAX);
+        Bombo bomboReintegro = new Bombo(PrimitivaConstantes.REINTEGRO_MIN, PrimitivaConstantes.REINTEGRO_MAX);
         this.sorteo = new Sorteo(bomboPrincipal, bomboReintegro);
     }
 
