@@ -1,6 +1,6 @@
 package com.primitiva.Juego;
 
-import com.primitiva.Bombo;
+import com.primitiva.GestionSorteo.Bombo;
 import com.primitiva.GestionSorteo.ResultadoSorteo;
 import com.primitiva.GestionSorteo.Sorteo;
 import com.primitiva.PrimitivaConstantes;
@@ -17,17 +17,18 @@ public class JuegoPrimitiva {
         this.sorteo = new Sorteo(bomboPrincipal, bomboReintegro);
     }
 
+
     // Juego de una sola vez
     public Premios juegoUnico(Boleto boleto) {
         sorteo.generar();
-        int aciertos = calcularAciertos(boleto, sorteo);
+        int aciertos = calcularAciertos(boleto);
         boolean reintegro = boleto.getReintegro() == sorteo.getReintegro();
-        boolean complementario = calcularComplementario(boleto, sorteo);
+        boolean complementario = calcularComplementario(boleto);
 
         return determinarPremio(aciertos, reintegro, complementario);
     }
 
-    private int calcularAciertos(Boleto boleto, Sorteo sorteo) {
+    private int calcularAciertos(Boleto boleto) {
         int aciertos = 0;
         for (int numero : boleto.getNumerosPrincipales()) {
             for (int resultado : sorteo.getResultado()) {
@@ -40,8 +41,8 @@ public class JuegoPrimitiva {
         return aciertos;
     }
 
-    private boolean calcularComplementario(Boleto boleto, Sorteo sorteo) {
-        if (calcularAciertos(boleto, sorteo) == 5) {
+    private boolean calcularComplementario(Boleto boleto) {
+        if (calcularAciertos(boleto) == 5) {
             for (int numero : boleto.getNumerosPrincipales()) {
                 boolean encontrado = false;
                 for (int resultado : sorteo.getResultado()) {
@@ -58,6 +59,7 @@ public class JuegoPrimitiva {
         return false;
     }
 
+
     private Premios determinarPremio(int aciertos, boolean reintegro, boolean complementario) {
         switch (aciertos) {
             case 3:
@@ -73,6 +75,7 @@ public class JuegoPrimitiva {
         }
     }
 
+
     // Jugar hasta obtener el premio
     public long juegoHastaPremio(Boleto boleto) {
         int iteraciones = 0;
@@ -82,7 +85,7 @@ public class JuegoPrimitiva {
             aciertos = 0;
             iteraciones ++;
             sorteo.generar();
-            aciertos = calcularAciertos(boleto, sorteo);
+            aciertos = calcularAciertos(boleto);
             reintegro = boleto.getReintegro() == sorteo.getReintegro();
         }while (aciertos < 3 || reintegro);
         return iteraciones;
@@ -96,7 +99,7 @@ public class JuegoPrimitiva {
             aciertos = 0;
             iteraciones ++;
             sorteo.generar();
-            aciertos = calcularAciertos(boleto, sorteo);
+            aciertos = calcularAciertos(boleto);
         }while (aciertos < 3);
         return iteraciones;
     }

@@ -1,6 +1,6 @@
 package com.primitiva.GestionSorteo;
 
-import com.primitiva.*;
+
 import com.primitiva.PrimitivaConstantes;
 
 public class Sorteo {
@@ -16,6 +16,7 @@ public class Sorteo {
         this.bomboReintegro = bomboReintegro;
         this.resultado = new int[PrimitivaConstantes.TOTAL_NUMEROS]; // Array reutilizable
     }
+
 
     public void generar() {
         bomboPrincipal.reiniciarBolas(); // Reinicia el bombo para cada sorteo

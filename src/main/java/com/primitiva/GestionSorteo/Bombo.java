@@ -1,4 +1,6 @@
-package com.primitiva;
+package com.primitiva.GestionSorteo;
+
+import com.primitiva.PrimitivaConstantes;
 
 import java.util.Arrays;
 
